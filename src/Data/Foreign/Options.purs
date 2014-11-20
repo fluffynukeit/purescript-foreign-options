@@ -13,19 +13,19 @@ import Data.Function
 foreign import data Options :: *
 
 foreign import toOptionsImpl
-  "function toOptionsImpl(record) { \
+  "function toOptionsImpl(l, r, j, n, record) { \
   \\
   \  var applyArgs = function(f, args) { \
   \    return (args.length == 0) ? f : applyArgs(f(args.shift()), args); \
   \  }; \
   \\  
   \  var convert = function(value) { \
-  \\
-  \    if (value instanceof PS.Data_Either.Left || \
-  \        value instanceof PS.Data_Either.Right || \
-  \        value instanceof PS.Data_Maybe.Just) { \
+  \    var ctr = value.constructor; \
+  \    if (ctr === l.constructor || \
+  \        ctr === r.constructor || \
+  \        ctr === j.constructor) { \
   \      return convert(value.value0); \
-  \    } else if (value instanceof PS.Data_Maybe.Nothing) { \
+  \    } else if (value === n) { \
   \      return null; \
   \    } else if (typeof value === \"function\") { \
   \      return function() { \
@@ -33,7 +33,7 @@ foreign import toOptionsImpl
   \               return applyArgs(value, argArray); \
   \             }; \
   \    } else if (typeof value === \"object\") { \
-  \      return toOptionsImpl(value); \
+  \      return toOptionsImpl(l, r, j, n, value); \
   \    } else { \
   \      return value; \
   \    } \
@@ -48,8 +48,8 @@ foreign import toOptionsImpl
   \  } \
   \\
   \  return optsRecord; \
-  \}" :: forall a b. Fn1 a b
+  \}" :: forall a b c. Fn5 (Either b b) (Either b b) (Maybe b) (Maybe b) a c
 
 toOptions :: forall a. {|a} -> Options
-toOptions = runFn1 toOptionsImpl
+toOptions record = runFn5 toOptionsImpl (Left {}) (Right {}) (Just {}) (Nothing) record
 
