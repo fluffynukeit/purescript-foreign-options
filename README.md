@@ -6,7 +6,7 @@ Purescript module for converting options objects defined in Purescript into obje
 ### Motivation
 
 Many Javascript libraries use anonymous objects to specify "options" for configuring various
-operations.  Often, the option fields can take one of a couple types (such either
+operations.  Often, the option fields can take one of a couple types (such as either
 `String` or `Number`) or can be absent from the object entirely, in which case
 a reasonable default is assumed.
 
@@ -16,12 +16,20 @@ Javascript library does not understand these types, a conversion must be made
 before the options can be used in the foreign library.  This module provides functionality for
 handling this conversion in a type safe way.
 
-The module declares two types: `OptionsSrc` and `Options`.  `OptionsSrc`
-associates an options type `a` with a Purescript record of options type `{|b}`  The `toOptions` function
-then converts any `OptionsSrc a {|b}` to a foreign object `Options a`.  The
-foreign function can then be declared to accept a specify kind of foreign options,
-such as `Options MyLibrary`, so passing options of the wrong type to a foreign
-function results in a compile time error.
+The module defines a type `Options a` to represent a foreign anonymous options
+object.  Also defined is a function `toOptions` that converts a purescript record
+of type `{|a}` to `Options {|a}`.  In this way, foreign functions that consume the
+options can be declared using `Options MyOptionsRecordType` in the function signature,
+so passing any incomplete or incorrect set of options to that function is a 
+compile time error.
+
+Additionally, since records are used to respresent the set of options in Purescript,
+options can be easily updated using the `record { myfield = 7}` syntax.
+
+The conversion is one-way; there is no provided functionality to marshal the
+`Options` type back to a Purescript record.
+
+Example usage is provided in the `examples` directory.
 
 ### Conversion method
 

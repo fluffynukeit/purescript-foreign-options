@@ -8,12 +8,18 @@ import Debug.Trace
 import Control.Monad.Eff
 import Data.Function
 
--- Phantom type to keep track of what kind of Options are generated, so using
--- the wrong kind of Options is a compile error.  This way, functions can
--- be declared to accept only the foreign options of the correct type.
-data TestOptions = TestOptions 
 
-myTestOptions = OptionsSrc TestOptions
+type TestOptions = 
+  { stringOpt     :: String
+  , optionalOpt1  :: Maybe String
+  , optionalOpt2  :: Maybe (String -> Number -> {whatever :: Boolean} -> Number)
+  , optionalOpt3  :: Maybe String
+  , objectOpt     :: { object1 :: String, object2:: Maybe String}
+  , eitherOpt1    :: Either String Number
+  , eitherOpt2    :: Either Number String
+  }
+
+defaultOpts = 
   { stringOpt : "myStringOption" -- this field will be included
   , optionalOpt1 : Just "optionalString" -- included 
   , optionalOpt2 : Just (\a b c -> 1) -- included
@@ -21,7 +27,7 @@ myTestOptions = OptionsSrc TestOptions
   , objectOpt : { object1 : "object1" , object2: Nothing} -- object1 field included, object2 field excluded
   , eitherOpt1 : Left "eitherOpt1" -- field included
   , eitherOpt2 : Right "eitherOpt2" -- field included
-  }
+  } :: TestOptions
 
 -- This stringify method is declared to only accept Options with the TestOptions
 -- phantom type.  Using Options 
@@ -30,7 +36,21 @@ foreign import stringify "function stringify(a) { return function() {console.log
 
 main = do
   print $ "conversion start"
-  let forOpts = toOptions myTestOptions
+  let forOpts = toOptions defaultOpts
+
   -- Here, type of forOpts is Options TestOptions
   stringify forOpts
   print $ "conversion complete"
+
+  -- We can also selectively update options using record syntax
+  print $ "updated conversion start"
+  stringify <<< toOptions $ defaultOpts { optionalOpt3 = Just "new opt 3" }
+  print $ "updated conversion complete"
+
+  -- Using the wrong record type (such as incomplete record) is a compile error:
+  -- print $ "compile error start"
+  -- stringify <<< toOptions $ { stringOpt : "my wrong option" }
+  -- print $ "compile error end"
+
+  
+  

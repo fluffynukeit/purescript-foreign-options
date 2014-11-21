@@ -4,9 +4,9 @@
 
 ### Types
 
-    data Options :: *
+    data Options :: * -> *
 
 
 ### Values
 
-    toOptions :: forall a. {  | a } -> Options
+    toOptions :: forall a. {  | a } -> Options {  | a }

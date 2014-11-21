@@ -1,7 +1,6 @@
 
 module Data.Foreign.Options 
   ( Options()
-  , OptionsSrc(..)
   , toOptions
   ) 
 where
@@ -10,9 +9,7 @@ import Data.Either
 import Data.Maybe
 import Data.Function
 
-
 foreign import data Options :: * -> *
-data OptionsSrc a b = OptionsSrc a b
 
 foreign import toOptionsImpl
   "function toOptionsImpl(l, r, j, n, record) { \
@@ -52,7 +49,7 @@ foreign import toOptionsImpl
   \  return optsRecord; \
   \}" :: forall a b c. Fn5 (Either b b) (Either b b) (Maybe b) (Maybe b) a c
 
-toOptions :: forall a b. OptionsSrc a {|b} -> Options a
-toOptions (OptionsSrc _ record) = 
+toOptions :: forall a. {|a} -> Options {|a}
+toOptions record = 
   runFn5 toOptionsImpl (Left {}) (Right {}) (Just {}) (Nothing) record
 
