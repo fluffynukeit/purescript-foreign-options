@@ -30,7 +30,7 @@ defaultOpts =
   } :: TestOptions
 
 -- This stringify method is declared to only accept Options with the TestOptions
--- phantom type.  Using Options 
+-- type.
 foreign import stringify "function stringify(a) { return function() {console.log(a); return {}; };}"
  :: forall r. Options TestOptions -> Eff (trace :: Trace | r) Unit
 

@@ -1,7 +1,8 @@
 purescript-foreign-options
 ==========================
 
-Purescript module for converting options objects defined in Purescript into objects used for options in foreign Javascript libraries.
+Purescript module for converting options records defined in Purescript into 
+objects used for options in foreign Javascript libraries.
 
 ### Motivation
 
@@ -16,6 +17,8 @@ Javascript library does not understand these types, a conversion must be made
 before the options can be used in the foreign library.  This module provides functionality for
 handling this conversion in a type safe way.
 
+### Functionality
+
 The module defines a type `Options a` to represent a foreign anonymous options
 object.  Also defined is a function `toOptions` that converts a purescript record
 of type `{|a}` to `Options {|a}`.  In this way, foreign functions that consume the
@@ -24,7 +27,7 @@ so passing any incomplete or incorrect set of options to that function is a
 compile time error.
 
 Additionally, since records are used to respresent the set of options in Purescript,
-options can be easily updated using the `record { myfield = 7}` syntax.
+options can be easily updated using the `record { myfield = 7 }` syntax.
 
 The conversion is one-way; there is no provided functionality to marshal the
 `Options` type back to a Purescript record.
