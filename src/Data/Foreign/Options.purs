@@ -15,7 +15,7 @@ foreign import toOptionsImpl
   "function toOptionsImpl(l, r, j, n, record) { \
   \\
   \  var applyArgs = function(f, args) { \
-  \    return (args.length == 0) ? f : applyArgs(f(args.shift()), args); \
+  \    return (args.length == 0) ? ((typeof f === 'function') ? f() : f) : applyArgs(f(args.shift()), args); \
   \  }; \
   \\  
   \  var convert = function(value) { \

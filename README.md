@@ -41,8 +41,10 @@ Example usage is provided in the `examples` directory.
 1. `Left` and `Right` are converted to the conversion of their inner values.
 2. `Just` is converted to the conversion of its inner value.
 3. Fields with `Nothing` are not included in the resulting options object.
-4. Fields with records are kept and their value is the conversion of the record.
-5. Anything else is left unchanged and must be manually converted to one of the
+4. Fields with functions returning pure values are converted to an uncurried form.
+5. Fields with functions returning effectful value are converted to an uncurried form and run immediately.
+6. Fields with records are kept and their value is the conversion of the record.
+7. Anything else is left unchanged and must be manually converted to one of the
 above types or the type expected by the Javascript library before invoking `toOptions`.
 
 
