@@ -4,6 +4,9 @@
 
 ### Types
 
+    data Opaque a where
+      Opaque :: a -> Opaque a
+
     data Options :: * -> *
 
 

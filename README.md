@@ -29,6 +29,9 @@ compile time error.
 Additionally, since records are used to respresent the set of options in Purescript,
 options can be easily updated using the `record { myfield = 7 }` syntax.
 
+Fields can be protected from conversion by wrapping them in the `Opaque` type.
+This would be used, for example, to protect a constructed object instance.
+
 The conversion is one-way; there is no provided functionality to marshal the
 `Options` type back to a Purescript record.
 
@@ -36,16 +39,23 @@ Example usage is provided in the `examples` directory.
 
 ### Conversion method
 
- This function converts an arbitrary record in the following ways:
+ This function converts an arbitrary record in the following ways, with example
+ cases listed in _italics_:
 
-1. `Left` and `Right` are converted to the conversion of their inner values.
-2. `Just` is converted to the conversion of its inner value.
-3. Fields with `Nothing` are not included in the resulting options object.
+1. Fields wrapped in the `Opaque` type are unchanged. 
+_Use to protect a foreign JS object from coversion._
+2. `Left` and `Right` are converted to the conversion of their inner values. 
+_Use to choose from either of two types for an options field._
+3. `Just` is converted to the conversion of its inner value. Fields with `Nothing` are not included in the resulting options object.
+_Use when an options field can be present or absent from the options object._
 4. Fields with functions returning pure values are converted to an uncurried form.
-5. Fields with functions returning effectful value are converted to an uncurried form and run immediately.
-6. Fields with records are kept and their value is the conversion of the record.
-7. Anything else is left unchanged and must be manually converted to one of the
-above types or the type expected by the Javascript library before invoking `toOptions`.
+_Use to pass purescript functions as callbacks without converting to `FnX` types._
+5. Fields with functions returning effectful values are converted to an uncurried form and run immediately when called.
+_Use to pass purescript effectful functions as callbacks that are run when invoked._
+6. Fields with any other object values are converted to object literals with each field converted according to these rules.
+_Use to represent options with nested structure._
+7. Anything else is left unchanged. If a conversion is needed and is not covered by the above rules, it must be performed manually before invoking `toOptions`.
+_Use for types consistent between PS and JS, like `String`, `Number`, etc._
 
 
 

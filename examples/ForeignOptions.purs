@@ -14,9 +14,10 @@ type TestOptions =
   , optionalOpt1  :: Maybe String
   , optionalOpt2  :: Maybe (String -> Number -> {whatever :: Boolean} -> Number)
   , optionalOpt3  :: Maybe String
-  , objectOpt     :: { object1 :: String, object2:: Maybe String}
+  , objectOpt     :: { object1 :: String, object2:: Maybe String }
   , eitherOpt1    :: Either String Number
   , eitherOpt2    :: Either Number String
+  , opaqueOpt     :: Opaque { opaque1 :: String , opaque2 :: Maybe Number}
   }
 
 defaultOpts = 
@@ -24,9 +25,11 @@ defaultOpts =
   , optionalOpt1 : Just "optionalString" -- included 
   , optionalOpt2 : Just (\a b c -> 1) -- included
   , optionalOpt3 : Nothing -- field excluded
-  , objectOpt : { object1 : "object1" , object2: Nothing} -- object1 field included, object2 field excluded
+  , objectOpt : { object1 : "object1" , object2: Nothing } -- object1 field included, object2 field excluded
   , eitherOpt1 : Left "eitherOpt1" -- field included
   , eitherOpt2 : Right "eitherOpt2" -- field included
+  , opaqueOpt : Opaque { opaque1 : "opaque1" , opaque2 : Just 12345}
+  -- ^ Any value wrapped in Opaque is protected from the conversion rules.
   } :: TestOptions
 
 -- This stringify method is declared to only accept Options with the TestOptions
@@ -42,7 +45,7 @@ main = do
   stringify forOpts
   print $ "conversion complete"
 
-  -- We can also selectively update options using record syntax
+  -- We can also selectively update options using record syntax.
   print $ "updated conversion start"
   stringify <<< toOptions $ defaultOpts { optionalOpt3 = Just "new opt 3" }
   print $ "updated conversion complete"
