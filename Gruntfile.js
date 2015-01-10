@@ -9,7 +9,7 @@ module.exports = function(grunt) {
       "bower_components/purescript-*/src/**/*.purs",
     ],
 
-    clean: ["output"],
+    clean: ["tmp", "output"],
 
     pscMake: ["<%=libFiles%>"],
     dotPsci: ["<%=libFiles%>"],
@@ -26,15 +26,32 @@ module.exports = function(grunt) {
         src : ["examples/ForeignOptions.purs", "<%=libFiles%>"],
         dest : "tmp/ForeignOptions.js"
       }
+    },
+
+    copy: [
+      {
+        expand: true,
+        cwd: "node_modules",
+        src: "**",
+        dest: "tmp/node_modules/"
+      }
+    ],
+
+    execute: {
+      exampleTest: {
+        src: "tmp/ForeignOptions.js"
+      }
     }
   }
   );
 
+  grunt.loadNpmTasks("grunt-contrib-copy");
   grunt.loadNpmTasks("grunt-contrib-clean");
+  grunt.loadNpmTasks("grunt-execute")
   grunt.loadNpmTasks("grunt-purescript");
 
   grunt.registerTask("make", ["pscMake", "dotPsci", "pscDocs"]);
-  grunt.registerTask("default", ["clean", "make", "examples"]);
-  grunt.registerTask("examples", ["psc"]);
+  grunt.registerTask("default", ["clean", "make", "test"]);
+  grunt.registerTask("test", ["psc", "copy", "execute"]);
 };
 

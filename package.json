@@ -1,9 +1,14 @@
-{
+{ 
+  "name": "purescript-foreign-options",
+  "description": "PureScript library for marshalling PureScript records into Javascript options.",
   "private": true,
-  "dependencies": {
+  "license": "MIT",
+  "private": true,
+  "devDependencies": {
     "grunt": "~0.4.4",
     "grunt-contrib-clean": "~0.5.0",
     "grunt-execute": "~0.2.2",
-    "grunt-purescript": "~0.5.1"
+    "grunt-purescript": "~0.5.1",
+    "grunt-contrib-copy": "^0.5.0"
   }
 }
