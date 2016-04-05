@@ -23,6 +23,7 @@
   ],
   "dependencies": {
     "purescript-maybe": "*",
-    "purescript-either": "*"
+    "purescript-either": "*",
+    "purescript-functions": "*"
   }
 }
