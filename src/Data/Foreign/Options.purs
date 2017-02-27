@@ -7,7 +7,7 @@ where
 
 import Data.Either (Either(..))
 import Data.Maybe (Maybe(..)) 
-import Data.Function (Fn6, runFn6)
+import Data.Function.Uncurried (Fn6, runFn6)
 
 foreign import data Options :: * -> *
 data Opaque a = Opaque a
