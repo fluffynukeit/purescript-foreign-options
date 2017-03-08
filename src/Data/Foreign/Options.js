@@ -2,7 +2,7 @@
 "use strict";
 
 // module Data.Foreign.Options 
-exports.toOptionsImpl= function(l, r, j, n, o, record) { 
+function toOptionsImpl(l, r, j, n, o, record) { 
   
     var applyArgs = function(f, args) { 
       return (args.length == 0) ? ((typeof f === 'function') ? f() : f) : applyArgs(f(args.shift()), args); 
@@ -43,3 +43,5 @@ exports.toOptionsImpl= function(l, r, j, n, o, record) {
     return optsRecord; 
 
 }
+
+exports.toOptionsImpl = toOptionsImpl;
